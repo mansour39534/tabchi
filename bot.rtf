@@ -1,0 +1,644 @@
+{\rtf1\fbidis\ansi\ansicpg1256\deff0\deflang1065{\fonttbl{\f0\fnil\fcharset0 Arial;}{\f1\fnil\fcharset178{\*\fname Arial;}Arial (Arabic);}{\f2\fnil\fcharset134 SimSun;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\ltrpar\sa200\sl276\slmult1\lang1033\fs22 redis = (loadfile "redis.lua")()\par
+redis = redis.connect('127.0.0.1', 6379)\par
+\par
+function dl_cb(arg, data)\par
+end\par
+function get_admin ()\par
+\tab if redis:get('botBOT-IDadminset') then\par
+\tab\tab return true\par
+\tab else\par
+   \tab\tab print("\\n\\27[32m  \lang1065\f1\rtlch\'e1\'c7\'d2\'e3\'e5 \'98\'c7\'d1\'98\'d1\'cf \'d5\'cd\u1740?\'cd \'a1 \'dd\'d1\'c7\'e3\u1740?\'e4 \'e6 \'c7\'e3\'e6\'d1\'c7\'ca \'e3\'cf\u1740?\'d1\u1740?\'ca\u1740? \'d1\'c8\'c7\'ca \'ca\'c8\'e1\u1740?\'db \'90\'d1\lang1033\f0\ltrch  <<\\n                    \lang1065\f1\rtlch\'ca\'da\'d1\u1740?\'dd \'98\'c7\'d1\'c8\'d1\u1740? \'c8\'e5 \'da\'e4\'e6\'c7\'e4 \'e3\'cf\u1740?\'d1 \'c7\'d3\'ca\lang1033\f0\ltrch\\n\\27[34m                   \lang1065\f1\rtlch\'c7\u1740?\'cf\u1740? \'ce\'e6\'cf \'d1\'c7 \'c8\'e5 \'da\'e4\'e6\'c7\'e4 \'e3\'cf\u1740?\'d1 \'e6\'c7\'d1\'cf \'98\'e4\u1740?\'cf\lang1033\f0\ltrch\\n\\27[32m    \lang1065\f1\rtlch\'d4\'e3\'c7 \'e3\u1740? \'ca\'e6\'c7\'e4\u1740?\'cf \'c7\'d2 \'d1\'c8\'c7\'ca \'d2\u1740?\'d1 \'d4\'e4\'c7\'d3\'e5 \'da\'cf\'cf\u1740? \'ce\'e6\'cf \'d1\'c7 \'c8\'cf\'d3\'ca \'c7\'e6\'d1\u1740?\'cf\lang1033\f0\ltrch\\n\\27[34m        \lang1065\f1\rtlch\'d1\'c8\'c7\'ca\lang1033\f0\ltrch :       @id_ProBot")\par
+    \tab\tab print("\\n\\27[32m >> Tabchi Bot need a fullaccess user (ADMIN)\\n\\27[34m Imput Your ID as the ADMIN\\n\\27[32m You can get your ID of this bot\\n\\27[34m                 @id_ProBot")\par
+    \tab\tab print("\\n\\27[36m                      : \lang1065\f1\rtlch\'d4\'e4\'c7\'d3\'e5 \'da\'cf\'cf\u1740? \'c7\'cf\'e3\u1740?\'e4 \'d1\'c7 \'e6\'c7\'d1\'cf \'98\'e4\u1740?\'cf\lang1033\f0\ltrch  << \\n >> Imput the Admin ID :\\n\\27[31m                 ")\par
+    \tab\tab admin=io.read()\par
+\tab\tab redis:del("botBOT-IDadmin")\par
+    \tab\tab redis:sadd("botBOT-IDadmin", admin)\par
+\tab\tab redis:set('botBOT-IDadminset',true)\par
+  \tab end\par
+  \tab return print("\\n\\27[36m     ADMIN ID |\\27[32m ".. admin .." \\27[36m| \lang1065\f1\rtlch\'d4\'e4\'c7\'d3\'e5 \'c7\'cf\'e3\u1740?\'e4\lang1033\f0\ltrch ")\par
+end\par
+function get_bot (i, naji)\par
+\tab function bot_info (i, naji)\par
+\tab\tab redis:set("botBOT-IDid",naji.id_)\par
+\tab\tab if naji.first_name_ then\par
+\tab\tab\tab redis:set("botBOT-IDfname",naji.first_name_)\par
+\tab\tab end\par
+\tab\tab if naji.last_name_ then\par
+\tab\tab\tab redis:set("botBOT-IDlanme",naji.last_name_)\par
+\tab\tab end\par
+\tab\tab redis:set("botBOT-IDnum",naji.phone_number_)\par
+\tab\tab return naji.id_\par
+\tab end\par
+\tab tdcli_function (\{ID = "GetMe",\}, bot_info, nil)\par
+end\par
+function reload(chat_id,msg_id)\par
+\tab loadfile("./bot-BOT-ID.lua")()\par
+\tab send(chat_id, msg_id, "<i>\lang1065\f1\rtlch\'c8\'c7 \'e3\'e6\'dd\'de\u1740?\'ca \'c7\'e4\'cc\'c7\'e3 \'d4\'cf\lang1033\f0\ltrch .</i>")\par
+end\par
+function is_naji(msg)\par
+    local var = false\par
+\tab local hash = 'botBOT-IDadmin'\par
+\tab local user = msg.sender_user_id_\par
+    local Naji = redis:sismember(hash, user)\par
+\tab if Naji then\par
+\tab\tab var = true\par
+\tab end\par
+\tab return var\par
+end\par
+function writefile(filename, input)\par
+\tab local file = io.open(filename, "w")\par
+\tab{\field{\*\fldinst{HYPERLINK "file:write(input"}}{\fldrslt{\ul\cf1 file:write(input}}}\f0\fs22 )\par
+\tab{\field{\*\fldinst{HYPERLINK "file:flush"}}{\fldrslt{\ul\cf1 file:flush}}}\f0\fs22 ()\par
+\tab{\field{\*\fldinst{HYPERLINK "file:close"}}{\fldrslt{\ul\cf1 file:close}}}\f0\fs22 ()\par
+\tab return true\par
+end\par
+function process_join(i, naji)\par
+\tab if naji.code_ == 429 then\par
+\tab\tab local message = tostring(naji.message_)\par
+\tab\tab local Time = message:match('%d+')\par
+\tab\tab redis:setex("botBOT-IDmaxjoin", tonumber(Time), true)\par
+\tab else\par
+\tab\tab redis:srem("botBOT-IDgoodlinks", i.link)\par
+\tab\tab redis:sadd("botBOT-IDsavedlinks", i.link)\par
+\tab end\par
+end\par
+function process_link(i, naji)\par
+\tab if (naji.is_group_ or naji.is_supergroup_channel_) then\par
+\tab\tab redis:srem("botBOT-IDwaitelinks", i.link)\par
+\tab\tab redis:sadd("botBOT-IDgoodlinks", i.link)\par
+\tab elseif naji.code_ == 429 then\par
+\tab\tab local message = tostring(naji.message_)\par
+\tab\tab local Time = message:match('%d+')\par
+\tab\tab redis:setex("botBOT-IDmaxlink", tonumber(Time), true)\par
+\tab else\par
+\tab\tab redis:srem("botBOT-IDwaitelinks", i.link)\par
+\tab end\par
+end\par
+function add(id)\par
+\tab local Id = tostring(id)\par
+\tab if not redis:sismember("botBOT-IDall", id) then\par
+\tab\tab if Id:match("^(%d+)$") then\par
+\tab\tab\tab redis:sadd("botBOT-IDusers", id)\par
+\tab\tab\tab redis:sadd("botBOT-IDall", id)\par
+\tab\tab elseif Id:match("^-100") then\par
+\tab\tab\tab redis:sadd("botBOT-IDsupergroups", id)\par
+\tab\tab\tab redis:sadd("botBOT-IDall", id)\par
+\tab\tab else\par
+\tab\tab\tab redis:sadd("botBOT-IDgroups", id)\par
+\tab\tab\tab redis:sadd("botBOT-IDall", id)\par
+\tab\tab end\par
+\tab end\par
+\tab return true\par
+end\par
+function rem(id)\par
+\tab local Id = tostring(id)\par
+\tab if redis:sismember("botBOT-IDall", id) then\par
+\tab\tab if Id:match("^(%d+)$") then\par
+\tab\tab\tab redis:srem("botBOT-IDusers", id)\par
+\tab\tab\tab redis:srem("botBOT-IDall", id)\par
+\tab\tab elseif Id:match("^-100") then\par
+\tab\tab\tab redis:srem("botBOT-IDsupergroups", id)\par
+\tab\tab\tab redis:srem("botBOT-IDall", id)\par
+\tab\tab else\par
+\tab\tab\tab redis:srem("botBOT-IDgroups", id)\par
+\tab\tab\tab redis:srem("botBOT-IDall", id)\par
+\tab\tab end\par
+\tab end\par
+\tab return true\par
+end\par
+function send(chat_id, msg_id, text)\par
+\tab tdcli_function (\{\par
+\tab\tab ID = "SendMessage",\par
+\tab\tab chat_id_ = chat_id,\par
+\tab\tab reply_to_message_id_ = msg_id,\par
+\tab\tab disable_notification_ = 1,\par
+\tab\tab from_background_ = 1,\par
+\tab\tab reply_markup_ = nil,\par
+\tab\tab input_message_content_ = \{\par
+\tab\tab\tab ID = "InputMessageText",\par
+\tab\tab\tab text_ = text,\par
+\tab\tab\tab disable_web_page_preview_ = 1,\par
+\tab\tab\tab clear_draft_ = 0,\par
+\tab\tab\tab entities_ = \{\},\par
+\tab\tab\tab parse_mode_ = \{ID = "TextParseModeHTML"\},\par
+\tab\tab\},\par
+\tab\}, dl_cb, nil)\par
+end\par
+get_admin()\par
+function tdcli_update_callback(data)\par
+\tab if data.ID == "UpdateNewMessage" then\par
+\tab\tab if not redis:get("botBOT-IDmaxlink") then\par
+\tab\tab\tab if redis:scard("botBOT-IDwaitelinks") ~= 0 then\par
+\tab\tab\tab\tab local links = redis:smembers("botBOT-IDwaitelinks")\par
+\tab\tab\tab\tab for x,y in pairs(links) do\par
+\tab\tab\tab\tab\tab if x == 11 then redis:setex("botBOT-IDmaxlink", 60, true) return end\par
+\tab\tab\tab\tab\tab tdcli_function(\{ID = "CheckChatInviteLink",invite_link_ = y\},process_link, \{link=y\})\par
+\tab\tab\tab\tab end\par
+\tab\tab\tab end\par
+\tab\tab end\par
+\tab\tab if not redis:get("botBOT-IDmaxjoin") then\par
+\tab\tab\tab if redis:scard("botBOT-IDgoodlinks") ~= 0 then \par
+\tab\tab\tab\tab local links = redis:smembers("botBOT-IDgoodlinks")\par
+\tab\tab\tab\tab for x,y in pairs(links) do\par
+\tab\tab\tab\tab\tab tdcli_function(\{ID = "ImportChatInviteLink",invite_link_ = y\},process_join, \{link=y\})\par
+\tab\tab\tab\tab\tab if x == 5 then redis:setex("botBOT-IDmaxjoin", 60, true) return end\par
+\tab\tab\tab\tab end\par
+\tab\tab\tab end\par
+\tab\tab end\par
+\tab\tab local msg = data.message_\par
+\tab\tab local bot_id = redis:get("botBOT-IDid") or get_bot()\par
+\tab\tab if (msg.sender_user_id_ == 777000 or msg.sender_user_id_ == 178220800) then\par
+\tab\tab\tab for k,v in pairs(redis:smembers('botBOT-IDadmin')) do\par
+\tab\tab\tab\tab tdcli_function(\{\par
+\tab\tab\tab\tab\tab ID = "ForwardMessages",\par
+\tab\tab\tab\tab\tab chat_id_ = v,\par
+\tab\tab\tab\tab\tab from_chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab\tab message_ids_ = \{[0] = msg.id_\},\par
+\tab\tab\tab\tab\tab disable_notification_ = 0,\par
+\tab\tab\tab\tab\tab from_background_ = 1\par
+\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab end\par
+\tab\tab end\par
+\tab\tab if tostring(msg.chat_id_):match("^(%d+)") then\par
+\tab\tab\tab if not redis:sismember("botBOT-IDall", msg.chat_id_) then\par
+\tab\tab\tab\tab redis:sadd("botBOT-IDusers", msg.chat_id_)\par
+\tab\tab\tab\tab redis:sadd("botBOT-IDall", msg.chat_id_)\par
+\tab\tab\tab end\par
+\tab\tab end\par
+\tab\tab add(msg.chat_id_)\par
+\tab\tab if msg.date_ < os.time() - 150 then\par
+\tab\tab\tab return false\par
+\tab\tab end\par
+\tab\tab if msg.content_.ID == "MessageText" then\par
+\tab\tab\tab local text = msg.content_.text_\par
+\tab\tab\tab local matches\par
+\tab\tab\tab find_link(text)\par
+\tab\tab\tab if is_naji(msg) then\par
+\tab\tab\tab\tab if text:match("^(\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'cf\u1740?\'d1\lang1033\f0\ltrch ) (%d+)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("%d+")\par
+\tab\tab\tab\tab\tab if redis:sismember('botBOT-IDadmin', matches) then\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'98\'c7\'d1\'c8\'d1 \'e3\'e6\'d1\'cf \'e4\'d9\'d1 \'cf\'d1 \'cd\'c7\'e1 \'cd\'c7\'d6\'d1 \'e3\'cf\u1740?\'d1 \'c7\'d3\'ca\lang1033\f0\ltrch .</i>")\par
+\tab\tab\tab\tab\tab elseif redis:sismember('botBOT-IDmod', msg.sender_user_id_) then\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'d4\'e3\'c7 \'cf\'d3\'ca\'d1\'d3\u1740? \'e4\'cf\'c7\'d1\u1740?\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab else\par
+\tab\tab\tab\tab\tab\tab redis:sadd('botBOT-IDadmin', matches)\par
+\tab\tab\tab\tab\tab\tab redis:sadd('botBOT-IDmod', matches)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'e3\'de\'c7\'e3 \'98\'c7\'d1\'c8\'d1 \'c8\'e5 \'e3\'cf\u1740?\'d1 \'c7\'d1\'ca\'de\'c7 \u1740?\'c7\'dd\'ca\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'cf\u1740?\'d1\'98\'e1\lang1033\f0\ltrch ) (%d+)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("%d+")\par
+\tab\tab\tab\tab\tab if redis:sismember('botBOT-IDmod',msg.sender_user_id_) then\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'d4\'e3\'c7 \'cf\'d3\'ca\'d1\'d3\u1740? \'e4\'cf\'c7\'d1\u1740?\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab if redis:sismember('botBOT-IDmod', matches) then\par
+\tab\tab\tab\tab\tab\tab redis:srem("botBOT-IDmod",matches)\par
+\tab\tab\tab\tab\tab\tab redis:sadd('botBOT-IDadmin'..tostring(matches),msg.sender_user_id_)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'e3\'de\'c7\'e3 \'98\'c7\'d1\'c8\'d1 \'c8\'e5 \'e3\'cf\u1740?\'d1\u1740?\'ca \'98\'e1 \'c7\'d1\'ca\'de\'c7 \u1740?\'c7\'dd\'ca\lang1033\f0\ltrch  .")\par
+\tab\tab\tab\tab\tab elseif redis:sismember('botBOT-IDadmin',matches) then\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, '\lang1065\f1\rtlch\'cf\'d1\'cd\'c7\'e1 \'cd\'c7\'d6\'d1 \'e3\'cf\u1740?\'d1 \'e5\'d3\'ca\'e4\'cf\lang1033\f0\ltrch .')\par
+\tab\tab\tab\tab\tab else\par
+\tab\tab\tab\tab\tab\tab redis:sadd('botBOT-IDadmin', matches)\par
+\tab\tab\tab\tab\tab\tab redis:sadd('botBOT-IDadmin'..tostring(matches),msg.sender_user_id_)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'98\'c7\'d1\'c8\'d1 \'c8\'e5 \'e3\'de\'c7\'e3 \'e3\'cf\u1740?\'d1\'98\'e1 \'e3\'e4\'d5\'e6\'c8 \'d4\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'cd\'d0\'dd \'e3\'cf\u1740?\'d1\lang1033\f0\ltrch ) (%d+)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("%d+")\par
+\tab\tab\tab\tab\tab if redis:sismember('botBOT-IDmod', msg.sender_user_id_) then\par
+\tab\tab\tab\tab\tab\tab if tonumber(matches) == msg.sender_user_id_ then\par
+\tab\tab\tab\tab\tab\tab\tab\tab redis:srem('botBOT-IDadmin', msg.sender_user_id_)\par
+\tab\tab\tab\tab\tab\tab\tab\tab redis:srem('botBOT-IDmod', msg.sender_user_id_)\par
+\tab\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'d4\'e3\'c7 \'cf\u1740?\'90\'d1 \'e3\'cf\u1740?\'d1 \'e4\u1740?\'d3\'ca\u1740?\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'d4\'e3\'c7 \'cf\'d3\'ca\'d1\'d3\u1740? \'e4\'cf\'c7\'d1\u1740?\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab if redis:sismember('botBOT-IDadmin', matches) then\par
+\tab\tab\tab\tab\tab\tab if  redis:sismember('botBOT-IDadmin'..msg.sender_user_id_ ,matches) then\par
+\tab\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'d4\'e3\'c7 \'e4\'e3\u1740? \'ca\'e6\'c7\'e4\u1740?\'cf \'e3\'cf\u1740?\'d1\u1740? \'98\'e5 \'c8\'e5 \'d4\'e3\'c7 \'e3\'de\'c7\'e3 \'cf\'c7\'cf\'e5 \'d1\'c7 \'da\'d2\'e1 \'98\'e4\u1740?\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab redis:srem('botBOT-IDadmin', matches)\par
+\tab\tab\tab\tab\tab\tab redis:srem('botBOT-IDmod', matches)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'98\'c7\'d1\'c8\'d1 \'c7\'d2 \'e3\'de\'c7\'e3 \'e3\'cf\u1740?\'d1\u1740?\'ca \'ce\'e1\'da \'d4\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "\lang1065\f1\rtlch\'98\'c7\'d1\'c8\'d1 \'e3\'e6\'d1\'cf \'e4\'d9\'d1 \'e3\'cf\u1740?\'d1 \'e4\'e3\u1740? \'c8\'c7\'d4\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'ca\'c7\'d2\'e5 \'d3\'c7\'d2\u1740? \'d1\'c8\'c7\'ca\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab get_bot()\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'e3\'d4\'ce\'d5\'c7\'ca \'dd\'d1\'cf\u1740? \'d1\'c8\'c7\'ca \'c8\'d1\'e6\'d2 \'d4\'cf\lang1033\f0\ltrch .</i>")\par
+\tab\tab\tab\tab elseif text:match("\lang1065\f1\rtlch\'d1\u1740?\'81\'e6\'d1\'ca\lang1033\f0\ltrch ") then\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "SendBotStartMessage",\par
+\tab\tab\tab\tab\tab\tab bot_user_id_ = 178220800,\par
+\tab\tab\tab\tab\tab\tab chat_id_ = 178220800,\par
+\tab\tab\tab\tab\tab\tab parameter_ = 'start'\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab elseif text:match("^(/reload)$") then\par
+\tab\tab\tab\tab\tab return reload(msg.chat_id_,msg.id_)\par
+\tab\tab\tab\tab elseif text:match("^\lang1065\f1\rtlch\'c8\'d1\'e6\'d2\'d1\'d3\'c7\'e4\u1740? \'d1\'c8\'c7\'ca\lang1033\f0\ltrch $") then\par
+\tab\tab\tab\tab\tab io.popen("git fetch --all && git reset --hard origin/persian && git pull origin persian && chmod +x bot"):read("*all")\par
+\tab\tab\tab\tab\tab local text,ok = io.open("bot.lua",'r'):read('*a'):gsub("BOT%-ID",BOT-ID)\par
+\tab\tab\tab\tab\tab io.open("bot-BOT-ID.lua",'w'):write(text):close()\par
+\tab\tab\tab\tab\tab return reload(msg.chat_id_,msg.id_)\par
+\tab\tab\tab\tab elseif text:match("^\lang1065\f1\rtlch\'e5\'e3\'90\'c7\'e3 \'d3\'c7\'d2\u1740? \'c8\'c7 \'ca\'c8\'8d\u1740?\lang1033\f0\ltrch $") then\par
+\tab\tab\tab\tab\tab local botid = BOT-ID - 1\par
+\tab\tab\tab\tab\tab redis:sunionstore("botBOT-IDall","tabchi:"..tostring(botid)..":all")\par
+\tab\tab\tab\tab\tab redis:sunionstore("botBOT-IDusers","tabchi:"..tostring(botid)..":pvis")\par
+\tab\tab\tab\tab\tab redis:sunionstore("botBOT-IDgroups","tabchi:"..tostring(botid)..":groups")\par
+\tab\tab\tab\tab\tab redis:sunionstore("botBOT-IDsupergroups","tabchi:"..tostring(botid)..":channels")\par
+\tab\tab\tab\tab\tab redis:sunionstore("botBOT-IDsavedlinks","tabchi:"..tostring(botid)..":savedlinks")\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<b>\lang1065\f1\rtlch\'e5\'e3\'90\'c7\'e3 \'d3\'c7\'d2\u1740? \'c7\'d8\'e1\'c7\'da\'c7\'ca \'c8\'c7 \'ca\'c8\'8d\u1740? \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch </b><code> "..tostring(botid).." </code><b>\lang1065\f1\rtlch\'c7\'e4\'cc\'c7\'e3 \'d4\'cf\lang1033\f0\ltrch .</b>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'e1\u1740?\'d3\'ca\lang1033\f0\ltrch ) (.*)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'e1\u1740?\'d3\'ca\lang1033\f0\ltrch  (.*)$")\par
+\tab\tab\tab\tab\tab local naji\par
+\tab\tab\tab\tab\tab if matches == "\lang1065\f1\rtlch\'e3\'ce\'c7\'d8\'c8\u1740?\'e4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab return tdcli_function(\{\par
+\tab\tab\tab\tab\tab\tab\tab ID = "SearchContacts",\par
+\tab\tab\tab\tab\tab\tab\tab query_ = nil,\par
+\tab\tab\tab\tab\tab\tab\tab limit_ = 999999999\par
+\tab\tab\tab\tab\tab\tab\},\par
+\tab\tab\tab\tab\tab\tab function (I, Naji)\par
+\tab\tab\tab\tab\tab\tab\tab local count = Naji.total_count_\par
+\tab\tab\tab\tab\tab\tab\tab local text = "\lang1065\f1\rtlch\'e3\'ce\'c7\'d8\'c8\u1740?\'e4\lang1033\f0\ltrch  : \\n"\par
+\tab\tab\tab\tab\tab\tab\tab for i =0 , tonumber(count) - 1 do\par
+\tab\tab\tab\tab\tab\tab\tab\tab local user = Naji.users_[i]\par
+\tab\tab\tab\tab\tab\tab\tab\tab local firstname = user.first_name_ or ""\par
+\tab\tab\tab\tab\tab\tab\tab\tab local lastname = user.last_name_ or ""\par
+\tab\tab\tab\tab\tab\tab\tab\tab local fullname = firstname .. " " .. lastname\par
+\tab\tab\tab\tab\tab\tab\tab\tab text = tostring(text) .. tostring(i) .. ". " .. tostring(fullname) .. " [" .. tostring(user.id_) .. "] = " .. tostring(user.phone_number_) .. "  \\n"\par
+\tab\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab\tab writefile("botBOT-ID_contacts.txt", text)\par
+\tab\tab\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab\tab\tab ID = "SendMessage",\par
+\tab\tab\tab\tab\tab\tab\tab\tab chat_id_ = I.chat_id,\par
+\tab\tab\tab\tab\tab\tab\tab\tab reply_to_message_id_ = 0,\par
+\tab\tab\tab\tab\tab\tab\tab\tab disable_notification_ = 0,\par
+\tab\tab\tab\tab\tab\tab\tab\tab from_background_ = 1,\par
+\tab\tab\tab\tab\tab\tab\tab\tab reply_markup_ = nil,\par
+\tab\tab\tab\tab\tab\tab\tab\tab input_message_content_ = \{ID = "InputMessageDocument",\par
+\tab\tab\tab\tab\tab\tab\tab\tab document_ = \{ID = "InputFileLocal",\par
+\tab\tab\tab\tab\tab\tab\tab\tab path_ = "botBOT-ID_contacts.txt"\},\par
+\tab\tab\tab\tab\tab\tab\tab\tab caption_ = "\lang1065\f1\rtlch\'e3\'ce\'c7\'d8\'c8\u1740?\'e4 \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1 \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch  BOT-ID"\}\par
+\tab\tab\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab\tab\tab return io.popen("rm -rf botBOT-ID_contacts.txt"):read("*all")\par
+\tab\tab\tab\tab\tab\tab end, \{chat_id = msg.chat_id_\})\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'81\'c7\'d3\'ce \'e5\'c7\u1740? \'ce\'e6\'cf\'98\'c7\'d1\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab local text = "<i>\lang1065\f1\rtlch\'e1\u1740?\'d3\'ca \'81\'c7\'d3\'ce \'e5\'c7\u1740? \'ce\'e6\'cf\'98\'c7\'d1\lang1033\f0\ltrch  :</i>\\n\\n"\par
+\tab\tab\tab\tab\tab\tab local answers = redis:smembers("botBOT-IDanswerslist")\par
+\tab\tab\tab\tab\tab\tab for k,v in pairs(answers) do\par
+\tab\tab\tab\tab\tab\tab\tab text = tostring(text) .. "<i>l" .. tostring(k) .. "l</i>  " .. tostring(v) .. " : " .. tostring(redis:hget("botBOT-IDanswers", v)) .. "\\n"\par
+\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab if redis:scard('botBOT-IDanswerslist') == 0  then text = "<code>       EMPTY</code>" end\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, text)\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'e3\'d3\'cf\'e6\'cf\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab naji = "botBOT-IDblockedusers"\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'d4\'ce\'d5\u1740?\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab naji = "botBOT-IDusers"\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'90\'d1\'e6\'e5\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab naji = "botBOT-IDgroups"\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'d3\'e6\'81\'d1\'90\'d1\'e6\'e5\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab naji = "botBOT-IDsupergroups"\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'e1\u1740?\'e4\'98\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab naji = "botBOT-IDsavedlinks"\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'e3\'cf\u1740?\'d1\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab naji = "botBOT-IDadmin"\par
+\tab\tab\tab\tab\tab else\par
+\tab\tab\tab\tab\tab\tab return true\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab local list =  redis:smembers(naji)\par
+\tab\tab\tab\tab\tab local text = tostring(matches).." : \\n"\par
+\tab\tab\tab\tab\tab for i, v in pairs(list) do\par
+\tab\tab\tab\tab\tab\tab text = tostring(text) .. tostring(i) .. "-  " .. tostring(v).."\\n"\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab writefile(tostring(naji)..".txt", text)\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "SendMessage",\par
+\tab\tab\tab\tab\tab\tab chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab\tab\tab reply_to_message_id_ = 0,\par
+\tab\tab\tab\tab\tab\tab disable_notification_ = 0,\par
+\tab\tab\tab\tab\tab\tab from_background_ = 1,\par
+\tab\tab\tab\tab\tab\tab reply_markup_ = nil,\par
+\tab\tab\tab\tab\tab\tab input_message_content_ = \{ID = "InputMessageDocument",\par
+\tab\tab\tab\tab\tab\tab\tab document_ = \{ID = "InputFileLocal",\par
+\tab\tab\tab\tab\tab\tab\tab path_ = tostring(naji)..".txt"\},\par
+\tab\tab\tab\tab\tab\tab caption_ = "\lang1065\f1\rtlch\'e1\u1740?\'d3\'ca\lang1033\f0\ltrch  "..tostring(matches).." \lang1065\f1\rtlch\'e5\'c7\u1740? \'ca\'c8\'e1\u1740?\'db \'90\'d1 \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch  BOT-ID"\}\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return io.popen("rm -rf "..tostring(naji)..".txt"):read("*all")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'e3\'d4\'c7\'e5\'cf\'e5\lang1033\f0\ltrch ) (.*)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'e3\'d4\'c7\'e5\'cf\'e5\lang1033\f0\ltrch  (.*)$")\par
+\tab\tab\tab\tab\tab if matches == "\lang1065\f1\rtlch\'d1\'e6\'d4\'e4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:set("botBOT-IDmarkread", true)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'81\u1740?\'c7\'e3 \'e5\'c7  >>  \'ce\'e6\'c7\'e4\'cf\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u10004?\u-497?\u10004?\u-497?\\n</i><code>(\lang1065\f1\rtlch\'ca\u1740?\'98 \'cf\'e6\'e3 \'dd\'da\'c7\'e1\lang1033\f0\ltrch )</code>")\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:del("botBOT-IDmarkread")\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'81\u1740?\'c7\'e3 \'e5\'c7  >>  \'ce\'e6\'c7\'e4\'cf\'e5 \'e4\'d4\'cf\'e5\lang1033\f0\ltrch  \u10004?\u-497?\\n</i><code>(\lang1065\f1\rtlch\'c8\'cf\'e6\'e4 \'ca\u1740?\'98 \'cf\'e6\'e3\lang1033\f0\ltrch )</code>")\par
+\tab\tab\tab\tab\tab end \par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'c7 \'81\u1740?\'c7\'e3\lang1033\f0\ltrch ) (.*)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'c7 \'81\u1740?\'c7\'e3\lang1033\f0\ltrch  (.*)$")\par
+\tab\tab\tab\tab\tab if matches == "\lang1065\f1\rtlch\'d1\'e6\'d4\'e4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:set("botBOT-IDaddmsg", true)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'dd\'da\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:del("botBOT-IDaddmsg")\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'db\u1740?\'d1\'dd\'da\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'c7 \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch ) (.*)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'c7 \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch  (.*)$")\par
+\tab\tab\tab\tab\tab if matches == "\lang1065\f1\rtlch\'d1\'e6\'d4\'e4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:set("botBOT-IDaddcontact", true)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'d4\'e3\'c7\'d1\'e5 \'e5\'e4\'90\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'dd\'da\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:del("botBOT-IDaddcontact")\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'d4\'e3\'c7\'d1\'e5 \'e5\'e4\'90\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'db\u1740?\'d1\'dd\'da\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8\lang1033\f0\ltrch ) (.*)") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8\lang1033\f0\ltrch  (.*)")\par
+\tab\tab\tab\tab\tab redis:set("botBOT-IDaddmsgtext", matches)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'cb\'c8\'ca  \'d4\'cf\lang1033\f0\ltrch  </i>:\\n\u-10179?\u-8903? "..matches.." \u-10179?\u-8903?")\par
+\tab\tab\tab\tab elseif text:match('^(\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'cc\'e6\'c7\'c8\lang1033\f0\ltrch ) "(.*)" (.*)') then\par
+\tab\tab\tab\tab\tab local txt, answer = text:match('^\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'cc\'e6\'c7\'c8\lang1033\f0\ltrch  "(.*)" (.*)')\par
+\tab\tab\tab\tab\tab redis:hset("botBOT-IDanswers", txt, answer)\par
+\tab\tab\tab\tab\tab redis:sadd("botBOT-IDanswerslist", txt)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'cc\'e6\'c7\'c8 \'c8\'d1\'c7\u1740?\lang1033\f0\ltrch  | </i>" .. tostring(txt) .. "<i> | \lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'d4\'cf \'c8\'e5\lang1033\f0\ltrch  :</i>\\n" .. tostring(answer))\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'cd\'d0\'dd \'cc\'e6\'c7\'c8\lang1033\f0\ltrch ) (.*)") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'cd\'d0\'dd \'cc\'e6\'c7\'c8\lang1033\f0\ltrch  (.*)")\par
+\tab\tab\tab\tab\tab redis:hdel("botBOT-IDanswers", matches)\par
+\tab\tab\tab\tab\tab redis:srem("botBOT-IDanswerslist", matches)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'cc\'e6\'c7\'c8 \'c8\'d1\'c7\u1740?\lang1033\f0\ltrch  | </i>" .. tostring(matches) .. "<i> | \lang1065\f1\rtlch\'c7\'d2 \'e1\u1740?\'d3\'ca \'cc\'e6\'c7\'c8 \'e5\'c7\u1740? \'ce\'e6\'cf\'98\'c7\'d1 \'81\'c7\'98 \'d4\'cf\lang1033\f0\ltrch .</i>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'81\'c7\'d3\'ce\'90\'e6\u1740? \'ce\'e6\'cf\'98\'c7\'d1\lang1033\f0\ltrch ) (.*)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'81\'c7\'d3\'ce\'90\'e6\u1740? \'ce\'e6\'cf\'98\'c7\'d1\lang1033\f0\ltrch  (.*)$")\par
+\tab\tab\tab\tab\tab if matches == "\lang1065\f1\rtlch\'d1\'e6\'d4\'e4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:set("botBOT-IDautoanswer", true)\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, 0, "<i>\lang1065\f1\rtlch\'81\'c7\'d3\'ce\'90\'e6\u1740?\u1740? \'ce\'e6\'cf\'98\'c7\'d1 \'ca\'c8\'e1\u1740?\'db \'90\'d1 \'dd\'da\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab\tab elseif matches == "\lang1065\f1\rtlch\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch " then\par
+\tab\tab\tab\tab\tab\tab redis:del("botBOT-IDautoanswer")\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, 0, "<i>\lang1065\f1\rtlch\'cd\'c7\'e1\'ca \'81\'c7\'d3\'ce\'90\'e6\u1740?\u1740? \'ce\'e6\'cf\'98\'c7\'d1 \'ca\'c8\'e1\u1740?\'db \'90\'d1 \'db\u1740?\'d1 \'dd\'da\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch .</i>")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'ca\'c7\'d2\'e5 \'d3\'c7\'d2\u1740?\lang1033\f0\ltrch )$")then\par
+\tab\tab\tab\tab\tab local list = \{redis:smembers("botBOT-IDsupergroups"),redis:smembers("botBOT-IDgroups")\}\par
+\tab\tab\tab\tab\tab tdcli_function(\{\par
+\tab\tab\tab\tab\tab\tab ID = "SearchContacts",\par
+\tab\tab\tab\tab\tab\tab query_ = nil,\par
+\tab\tab\tab\tab\tab\tab limit_ = 999999999\par
+\tab\tab\tab\tab\tab\}, function (i, naji)\par
+\tab\tab\tab\tab\tab\tab redis:set("botBOT-IDcontacts", naji.total_count_)\par
+\tab\tab\tab\tab\tab end, nil)\par
+\tab\tab\tab\tab\tab for i, v in pairs(list) do\par
+\tab\tab\tab\tab\tab\tab\tab for a, b in pairs(v) do \par
+\tab\tab\tab\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab ID = "GetChatMember",\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab chat_id_ = b,\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab user_id_ = bot_id\par
+\tab\tab\tab\tab\tab\tab\tab\tab\}, function (i,naji)\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab if  naji.ID == "Error" then rem(i.id) \par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab\tab\tab end, \{id=b\})\par
+\tab\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_,msg.id_,"<i>\lang1065\f1\rtlch\'ca\'c7\'d2\'e5\'9d\'d3\'c7\'d2\u1740? \'c2\'e3\'c7\'d1 \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1 \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch  </i><code> BOT-ID </code> \lang1065\f1\rtlch\'c8\'c7 \'e3\'e6\'dd\'de\u1740?\'ca \'c7\'e4\'cc\'c7\'e3 \'d4\'cf\lang1033\f0\ltrch .")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab local s = redis:get("botBOT-IDmaxjoin") and redis:ttl("botBOT-IDmaxjoin") or 0\par
+\tab\tab\tab\tab\tab local ss = redis:get("botBOT-IDmaxlink") and redis:ttl("botBOT-IDmaxlink") or 0\par
+\tab\tab\tab\tab\tab local msgadd = redis:get("botBOT-IDaddmsg") and "\u9745?\u-497?" or "\u10062?"\par
+\tab\tab\tab\tab\tab local numadd = redis:get("botBOT-IDaddcontact") and "\u9989?" or "\u10062?"\par
+\tab\tab\tab\tab\tab local txtadd = redis:get("botBOT-IDaddmsgtext") or  "\lang1065\f1\rtlch\'c7\'cf\'9d\'cf\u1740? \'90\'e1\'e3 \'ce\'d5\'e6\'d5\u1740? \'81\u1740?\'c7\'e3 \'c8\'cf\'e5\lang1033\f0\ltrch "\par
+\tab\tab\tab\tab\tab local autoanswer = redis:get("botBOT-IDautoanswer") and "\u9989?" or "\u10062?"\par
+\tab\tab\tab\tab\tab local wlinks = redis:scard("botBOT-IDwaitelinks")\par
+\tab\tab\tab\tab\tab local glinks = redis:scard("botBOT-IDgoodlinks")\par
+\tab\tab\tab\tab\tab local links = redis:scard("botBOT-IDsavedlinks")\par
+\tab\tab\tab\tab\tab local txt = "<i>\u9881?\u-497? \lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'c7\'cc\'d1\'c7\u1740?\u1740? \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1\lang1033\f0\ltrch </i><code> BOT-ID </code>\u9939?\\n\\n" .. tostring(autoanswer) .."<code> \lang1065\f1\rtlch\'cd\'c7\'e1\'ca \'81\'c7\'d3\'ce\'90\'e6\u1740?\u1740? \'ce\'e6\'cf\'98\'c7\'d1\lang1033\f0\ltrch  \u-10179?\u-8733? </code>\\n" .. tostring(numadd) .. "<code> \lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'c8\'c7 \'d4\'e3\'c7\'d1\'e5\lang1033\f0\ltrch  \u-10179?\u-8994? </code>\\n" .. tostring(msgadd) .. "<code> \lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'c8\'c7 \'81\u1740?\'c7\'e3\lang1033\f0\ltrch  \u-10179?\u-8738?</code>\\n\lang1065\f2\u12336?\u12336?\u12336?\f1\rtlch\'c7\f2\ltrch\u12336?\u12336?\u12336?\\n<code>\u-10179?\u-9020? \f1\rtlch\'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8\lang1033\f0\ltrch  :</code>\\n\u-10179?\u-9011? " .. tostring(txtadd) .. " \u-10179?\u-9011?\\n\lang1065\f2\u12336?\u12336?\u12336?\f1\rtlch\'c7\f2\ltrch\u12336?\u12336?\u12336?\\n<code>\u-10179?\u-9023? \f1\rtlch\'e1\u1740?\'e4\'98 \'e5\'c7\u1740? \'d0\'ce\u1740?\'d1\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  : </code><b>" .. tostring(links) .. "</b>\\n<code>\u9202?\tab\lang1065\f1\rtlch\'e1\u1740?\'e4\'98 \'e5\'c7\u1740? \'cf\'d1 \'c7\'e4\'ca\'d9\'c7\'d1 \'da\'d6\'e6\u1740?\'ca\lang1033\f0\ltrch  : </code><b>" .. tostring(glinks) .. "</b>\\n\u-10179?\u-8874?   <b>" .. tostring(s) .. " </b><code>\lang1065\f1\rtlch\'cb\'c7\'e4\u1740?\'e5 \'ca\'c7 \'da\'d6\'e6\u1740?\'ca \'e3\'cc\'cf\'cf\lang1033\f0\ltrch </code>\\n<code>\u10052?\u-497? \lang1065\f1\rtlch\'e1\u1740?\'e4\'98 \'e5\'c7\u1740? \'cf\'d1 \'c7\'e4\'ca\'d9\'c7\'d1 \'ca\'c7\u1740?\u1740?\'cf\lang1033\f0\ltrch  : </code><b>" .. tostring(wlinks) .. "</b>\\n\u-10179?\u-8879?\u-497?   <b>" .. tostring(ss) .. " </b><code>\lang1065\f1\rtlch\'cb\'c7\'e4\u1740?\'e5 \'ca\'c7 \'ca\'c7\u1740?\u1740?\'cf \'e1\u1740?\'e4\'98 \'e3\'cc\'cf\'cf\lang1033\f0\ltrch </code>\\n \u-10179?\u-8644? \lang1065\f1\rtlch\'d3\'c7\'d2\'e4\'cf\'e5\lang1033\f0\ltrch  : @RamtinTz"\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, 0, txt)\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c7\'e3\'c7\'d1\lang1033\f0\ltrch )$") or text:match("^(\lang1065\f1\rtlch\'c2\'e3\'c7\'d1\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab local gps = redis:scard("botBOT-IDgroups")\par
+\tab\tab\tab\tab\tab local sgps = redis:scard("botBOT-IDsupergroups")\par
+\tab\tab\tab\tab\tab local usrs = redis:scard("botBOT-IDusers")\par
+\tab\tab\tab\tab\tab local links = redis:scard("botBOT-IDsavedlinks")\par
+\tab\tab\tab\tab\tab local glinks = redis:scard("botBOT-IDgoodlinks")\par
+\tab\tab\tab\tab\tab local wlinks = redis:scard("botBOT-IDwaitelinks")\par
+\tab\tab\tab\tab\tab tdcli_function(\{\par
+\tab\tab\tab\tab\tab\tab ID = "SearchContacts",\par
+\tab\tab\tab\tab\tab\tab query_ = nil,\par
+\tab\tab\tab\tab\tab\tab limit_ = 999999999\par
+\tab\tab\tab\tab\tab\}, function (i, naji)\par
+\tab\tab\tab\tab\tab redis:set("botBOT-IDcontacts", naji.total_count_)\par
+\tab\tab\tab\tab\tab end, nil)\par
+\tab\tab\tab\tab\tab local contacts = redis:get("botBOT-IDcontacts")\par
+\tab\tab\tab\tab\tab local text = [[\par
+<i>\u-10179?\u-9016? \lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'e6 \'c2\'e3\'c7\'d1 \'ca\'c8\'e1\u1740?\'db \'90\'d1\lang1033\f0\ltrch  \u-10179?\u-9014?</i>\par
+          \par
+<code>\u-10179?\u-9116? \lang1065\f1\rtlch\'90\'dd\'ca \'e6 \'90\'e6 \'e5\'c7\u1740? \'d4\'ce\'d5\u1740?\lang1033\f0\ltrch  : </code>\par
+<b>]] .. tostring(usrs) .. [[</b>\par
+<code>\u-10179?\u-9115? \lang1065\f1\rtlch\'90\'d1\'e6\'e5\'c7\lang1033\f0\ltrch  : </code>\par
+<b>]] .. tostring(gps) .. [[</b>\par
+<code>\u-10180?\u-8432? \lang1065\f1\rtlch\'d3\'e6\'81\'d1 \'90\'d1\'e6\'e5 \'e5\'c7\lang1033\f0\ltrch  : </code>\par
+<b>]] .. tostring(sgps) .. [[</b>\par
+<code>\u-10179?\u-9002? \lang1065\f1\rtlch\'e3\'ce\'c7\'d8\'c8\u1740?\'e4 \'cf\'ce\u1740?\'d1\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  : </code>\par
+<b>]] .. tostring(contacts)..[[</b>\par
+<code>\u-10179?\u-9022? \lang1065\f1\rtlch\'e1\u1740?\'e4\'98 \'e5\'c7\u1740? \'d0\'ce\u1740?\'d1\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  : </code>\par
+<b>]] .. tostring(links)..[[</b>\par
+ \u-10179?\u-8644? \lang1065\f1\rtlch\'d3\'c7\'d2\'e4\'cf\'e5\lang1033\f0\ltrch  : @mansour_zv]] </i>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'e3\'d3\'cf\'e6\'cf\u1740?\'ca\lang1033\f0\ltrch ) (%d+)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("%d+")\par
+\tab\tab\tab\tab\tab rem(tonumber(matches))\par
+\tab\tab\tab\tab\tab redis:sadd("botBOT-IDblockedusers",matches)\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "BlockUser",\par
+\tab\tab\tab\tab\tab\tab user_id_ = tonumber(matches)\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'98\'c7\'d1\'c8\'d1 \'e3\'e6\'d1\'cf \'e4\'d9\'d1 \'e3\'d3\'cf\'e6\'cf \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'d1\'dd\'da \'e3\'d3\'cf\'e6\'cf\u1740?\'ca\lang1033\f0\ltrch ) (%d+)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("%d+")\par
+\tab\tab\tab\tab\tab add(tonumber(matches))\par
+\tab\tab\tab\tab\tab redis:srem("botBOT-IDblockedusers",matches)\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "UnblockUser",\par
+\tab\tab\tab\tab\tab\tab user_id_ = tonumber(matches)\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'e3\'d3\'cf\'e6\'cf\u1740?\'ca \'98\'c7\'d1\'c8\'d1 \'e3\'e6\'d1\'cf \'e4\'d9\'d1 \'d1\'dd\'da \'d4\'cf\lang1033\f0\ltrch .</i>")\tab\par
+\tab\tab\tab\tab elseif text:match('^(\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3\lang1033\f0\ltrch ) "(.*)" (.*)') then\par
+\tab\tab\tab\tab\tab local fname, lname = text:match('^\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3\lang1033\f0\ltrch  "(.*)" (.*)')\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "ChangeName",\par
+\tab\tab\tab\tab\tab\tab first_name_ = fname,\par
+\tab\tab\tab\tab\tab\tab last_name_ = lname\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'e4\'c7\'e3 \'cc\'cf\u1740?\'cf \'c8\'c7 \'e3\'e6\'dd\'de\u1740?\'ca \'cb\'c8\'ca \'d4\'cf\lang1033\f0\ltrch .</i>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740?\lang1033\f0\ltrch ) (.*)") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740?\lang1033\f0\ltrch  (.*)")\par
+\tab\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "ChangeUsername",\par
+\tab\tab\tab\tab\tab\tab username_ = tostring(matches)\par
+\tab\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, 0, '<i>\lang1065\f1\rtlch\'ca\'e1\'c7\'d4 \'c8\'d1\'c7\u1740? \'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740?\lang1033\f0\ltrch ...</i>')\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'cd\'d0\'dd \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740?\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "ChangeUsername",\par
+\tab\tab\tab\tab\tab\tab username_ = ""\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, 0, '<i>\lang1065\f1\rtlch\'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740? \'c8\'c7 \'e3\'e6\'dd\'de\u1740?\'ca \'cd\'d0\'dd \'d4\'cf\lang1033\f0\ltrch .</i>')\par
+\tab\tab\tab\tab elseif text:match('^(\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'98\'e4\lang1033\f0\ltrch ) "(.*)" (.*)') then\par
+\tab\tab\tab\tab\tab local id, txt = text:match('^\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'98\'e4\lang1033\f0\ltrch  "(.*)" (.*)')\par
+\tab\tab\tab\tab\tab send(id, 0, txt)\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c8\'90\'e6\lang1033\f0\ltrch ) (.*)") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'c8\'90\'e6\lang1033\f0\ltrch  (.*)")\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, 0, matches)\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'d4\'e4\'c7\'d3\'e5 \'e3\'e4\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>" .. msg.sender_user_id_ .."</i>")\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'ca\'d1\'98 \'98\'d1\'cf\'e4\lang1033\f0\ltrch ) (.*)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("^\lang1065\f1\rtlch\'ca\'d1\'98 \'98\'d1\'cf\'e4\lang1033\f0\ltrch  (.*)$") \tab\par
+\tab\tab\tab\tab\tab send(msg.chat_id_, msg.id_, '\lang1065\f1\rtlch\'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1 \'c7\'d2 \'90\'d1\'e6\'e5 \'e3\'e6\'d1\'cf \'e4\'d9\'d1 \'ce\'c7\'d1\'cc \'d4\'cf\lang1033\f0\ltrch ')\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "ChangeChatMemberStatus",\par
+\tab\tab\tab\tab\tab\tab chat_id_ = matches,\par
+\tab\tab\tab\tab\tab\tab user_id_ = bot_id,\par
+\tab\tab\tab\tab\tab\tab status_ = \{ID = "ChatMemberStatusLeft"\},\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab return rem(matches)\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'e5 \'e5\'e3\'e5\lang1033\f0\ltrch ) (%d+)$") then\par
+\tab\tab\tab\tab\tab local matches = text:match("%d+")\par
+\tab\tab\tab\tab\tab local list = \{redis:smembers("botBOT-IDgroups"),redis:smembers("botBOT-IDsupergroups")\}\par
+\tab\tab\tab\tab\tab for a, b in pairs(list) do\par
+\tab\tab\tab\tab\tab\tab for i, v in pairs(b) do \par
+\tab\tab\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab\tab\tab ID = "AddChatMember",\par
+\tab\tab\tab\tab\tab\tab\tab\tab chat_id_ = v,\par
+\tab\tab\tab\tab\tab\tab\tab\tab user_id_ = matches,\par
+\tab\tab\tab\tab\tab\tab\tab\tab forward_limit_ =  50\par
+\tab\tab\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab\tab end\tab\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'98\'c7\'d1\'c8\'d1 \'e3\'e6\'d1\'cf \'e4\'d9\'d1 \'c8\'e5 \'ca\'e3\'c7\'e3 \'90\'d1\'e6\'e5 \'e5\'c7\u1740? \'e3\'e4 \'cf\'da\'e6\'ca \'d4\'cf\lang1033\f0\ltrch </i>")\par
+\tab\tab\tab\tab elseif (text:match("^(\lang1065\f1\rtlch\'c7\'e4\'e1\'c7\u1740?\'e4\lang1033\f0\ltrch )$") and not msg.forward_info_)then\par
+\tab\tab\tab\tab\tab return tdcli_function(\{\par
+\tab\tab\tab\tab\tab\tab ID = "ForwardMessages",\par
+\tab\tab\tab\tab\tab\tab chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab\tab\tab from_chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab\tab\tab message_ids_ = \{[0] = msg.id_\},\par
+\tab\tab\tab\tab\tab\tab disable_notification_ = 0,\par
+\tab\tab\tab\tab\tab\tab from_background_ = 1\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'d1\'c7\'e5\'e4\'e3\'c7\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab local txt = '\u-10179?\u-9011?\lang1065\f1\rtlch\'d1\'c7\'e5\'e4\'e3\'c7\u1740? \'cf\'d3\'ca\'e6\'d1\'c7\'ca \'ca\'c8\'e1\u1740?\'db \'90\'d1\lang1033\f0\ltrch\u-10179?\u-9011?\\n\\n\lang1065\f1\rtlch\'c7\'e4\'e1\'c7\u1740?\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'da\'e1\'c7\'e3 \'e6\'d6\'da\u1740?\'ca \'ca\'c8\'e1\u1740?\'db \'90\'d1\lang1033\f0\ltrch  \u10004?\u-497?</i>\\n<code>\u10084?\u-497? \lang1065\f1\rtlch\'cd\'ca\u1740? \'c7\'90\'d1 \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1 \'d4\'e3\'c7 \'cf\'8d\'c7\'d1 \'e3\'cd\'cf\'e6\'cf\u1740?\'ca \'c7\'d1\'d3\'c7\'e1 \'81\u1740?\'c7\'e3 \'d4\'cf\'e5 \'c8\'c7\'d4\'cf \'c8\'c7\u1740?\'d3\'ca\u1740? \'c8\'e5 \'c7\u1740?\'e4 \'81\u1740?\'c7\'e3 \'81\'c7\'d3\'ce \'cf\'e5\'cf\lang1033\f0\ltrch\u10084?\u-497?</code>\\n/reload\\n<i>l\u-10179?\u-8956? \lang1065\f1\rtlch\'c8\'c7\'d1\'90\'d0\'c7\'d1\u1740? \'e3\'cc\'cf\'cf \'d1\'c8\'c7\'ca\lang1033\f0\ltrch  \u-10179?\u-8956?l</i>\\n<code>I\u9940?\u-497?\lang1065\f1\rtlch\'da\'cf\'e3 \'c7\'d3\'ca\'dd\'c7\'cf\'e5 \'c8\u1740? \'cc\'e5\'ca\lang1033\f0\ltrch\u9940?\u-497?I</code>\\n\lang1065\f1\rtlch\'c8\'d1\'e6\'d2\'d1\'d3\'c7\'e4\u1740? \'d1\'c8\'c7\'ca\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c8\'d1\'e6\'d2\'d1\'d3\'c7\'e4\u1740? \'d1\'c8\'c7\'ca \'c8\'e5 \'c2\'ce\'d1\u1740?\'e4 \'e4\'d3\'ce\'e5 \'e6 \'c8\'c7\'d1\'90\'d0\'c7\'d1\u1740? \'e3\'cc\'cf\'cf\lang1033\f0\ltrch  \u-10180?\u-8811?</i>\\n\\n\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'cf\u1740?\'d1 \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'cf\u1740?\'d1 \'cc\'cf\u1740?\'cf \'c8\'c7 \'d4\'e4\'c7\'d3\'e5 \'da\'cf\'cf\u1740? \'cf\'c7\'cf\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8510?</i>\\n\\n\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'cf\u1740?\'d1\'98\'e1 \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'cf\u1740?\'d1\'98\'e1 \'cc\'cf\u1740?\'cf \'c8\'c7 \'d4\'e4\'c7\'d3\'e5 \'da\'cf\'cf\u1740? \'cf\'c7\'cf\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8510?</i>\\n\\n<code>(\u9888?\u-497? \lang1065\f1\rtlch\'ca\'dd\'c7\'e6\'ca \'e3\'cf\u1740?\'d1 \'e6 \'e3\'cf\u1740?\'d1\'9d\'98\'e1 \'cf\'d3\'ca\'d1\'d3\u1740? \'c8\'e5 \'c7\'da\'d8\'c7 \'e6 \u1740?\'c7 \'90\'d1\'dd\'ca\'e4 \'e3\'de\'c7\'e3 \'e3\'cf\u1740?\'d1\u1740?\'ca \'c7\'d3\'ca\lang1033\f0\ltrch\u9888?\u-497?)</code>\\n\\n\lang1065\f1\rtlch\'cd\'d0\'dd \'e3\'cf\u1740?\'d1 \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cd\'d0\'dd \'e3\'cf\u1740?\'d1 \u1740?\'c7 \'e3\'cf\u1740?\'d1\'98\'e1 \'c8\'c7 \'d4\'e4\'c7\'d3\'e5 \'da\'cf\'cf\u1740? \'cf\'c7\'cf\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u10006?\u-497?</i>\\n\\n\lang1065\f1\rtlch\'ca\'d1\'98 \'90\'d1\'e6\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ce\'c7\'d1\'cc \'d4\'cf\'e4 \'c7\'d2 \'90\'d1\'e6\'e5 \'e6 \'cd\'d0\'dd \'c2\'e4 \'c7\'d2 \'c7\'d8\'e1\'c7\'da\'c7\'ca \'90\'d1\'e6\'e5 \'e5\'c7\lang1033\f0\ltrch  \u-10180?\u-8253?</i>\\n\\n\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e5\'e3\'e5 \'e3\'ce\'c7\'d8\'c8\u1740?\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'cd\'cf\'c7\'98\'cb\'d1 \'e3\'ce\'c7\'d8\'c8\u1740?\'e4 \'e6 \'c7\'dd\'d1\'c7\'cf \'cf\'d1 \'90\'dd\'ca \'e6 \'90\'e6\'e5\'c7\u1740? \'d4\'ce\'d5\u1740? \'c8\'e5 \'90\'d1\'e6\'e5\lang1033\f0\ltrch  \u10133?</i>\\n\\n\lang1065\f1\rtlch\'d4\'e4\'c7\'d3\'e5 \'e3\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cf\'d1\u1740?\'c7\'dd\'ca \'d4\'e4\'c7\'d3\'e5 \'ce\'e6\'cf\lang1033\f0\ltrch  \u-10180?\u-8812?</i>\\n\\n\lang1065\f1\rtlch\'c8\'90\'e6 \'e3\'ca\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cf\'d1\u1740?\'c7\'dd\'ca \'e3\'ca\'e4\lang1033\f0\ltrch  \u-10179?\u-8733?</i>\\n\\n\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'98\'e4 "\'d4\'e4\'c7\'d3\'e5" \'e3\'ca\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'e3\'ca\'e4 \'c8\'e5 \'d4\'e4\'c7\'d3\'e5 \'90\'d1\'e6\'e5 \u1740?\'c7 \'98\'c7\'d1\'c8\'d1 \'cf\'c7\'cf\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8988?</i>\\n\\n\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3 "\'e4\'c7\'e3" \'dd\'c7\'e3\u1740?\'e1\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3 \'d1\'c8\'c7\'ca\lang1033\f0\ltrch  \u9999?\u-497?</i>\\n\\n\lang1065\f1\rtlch\'ca\'c7\'d2\'e5 \'d3\'c7\'d2\u1740? \'d1\'c8\'c7\'ca\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'c7\'d2\'e5\'9d\'d3\'c7\'d2\u1740? \'c7\'d8\'e1\'c7\'da\'c7\'ca \'dd\'d1\'cf\u1740? \'d1\'c8\'c7\'ca\lang1033\f0\ltrch\u-10180?\u-8312?</i>\\n<code>(\lang1065\f1\rtlch\'e3\'e6\'d1\'cf \'c7\'d3\'ca\'dd\'c7\'cf\'e5 \'cf\'d1 \'e3\'e6\'c7\'d1\'cf\u1740? \'e5\'e3\'8d\'e6\'e4 \'81\'d3 \'c7\'d2 \'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3\lang1033\f0\ltrch\u-10179?\u-9011?\lang1065\f1\rtlch\'cc\'e5\'ca \'c8\'d1\'e6\'d2\'98\'d1\'cf\'e4 \'e4\'c7\'e3 \'e3\'ce\'c7\'d8\'c8 \'c7\'d4\'ca\'d1\'c7\'98\u1740? \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1\lang1033\f0\ltrch\u-10179?\u-9011?)</code>\\n\\n\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740? \'c7\'d3\'e3\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cc\'c7\u1740?\'90\'d2\u1740?\'e4\u1740? \'c7\'d3\'e3 \'c8\'c7 \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740? \'dd\'da\'e1\u1740?(\'e3\'cd\'cf\'e6\'cf \'cf\'d1 \'c8\'c7\'d2\'e5 \'d2\'e3\'c7\'e4\u1740? \'98\'e6\'ca\'c7\'e5\lang1033\f0\ltrch ) \u-10179?\u-8956?</i>\\n\\n\lang1065\f1\rtlch\'cd\'d0\'dd \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740?\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cd\'d0\'dd \'98\'d1\'cf\'e4 \'e4\'c7\'e3 \'98\'c7\'d1\'c8\'d1\u1740?\lang1033\f0\ltrch  \u10062?</i>\\n\\n\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'c7 \'d4\'e3\'c7\'d1\'e5 \'d1\'e6\'d4\'e4|\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'db\u1740?\u1740?\'d1 \'e6\'d6\'da\u1740?\'ca \'c7\'d4\'ca\'d1\'c7\'98 \'d4\'e3\'c7\'d1\'e5 \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1 \'cf\'d1 \'cc\'e6\'c7\'c8 \'d4\'e3\'c7\'d1\'e5 \'c8\'e5 \'c7\'d4\'ca\'d1\'c7\'98 \'90\'d0\'c7\'d4\'ca\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8938?</i>\\n\\n\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'c7 \'81\u1740?\'c7\'e3 \'d1\'e6\'d4\'e4|\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'db\u1740?\u1740?\'d1 \'e6\'d6\'da\u1740?\'ca \'c7\'d1\'d3\'c7\'e1 \'81\u1740?\'c7\'e3 \'cf\'d1 \'cc\'e6\'c7\'c8 \'d4\'e3\'c7\'d1\'e5 \'c8\'e5 \'c7\'d4\'ca\'d1\'c7\'98 \'90\'d0\'c7\'d4\'ca\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u8505?\u-497?</i>\\n\\n\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'81\u1740?\'c7\'e3 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8 \'e3\'ca\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'e3\'ca\'e4 \'cf\'c7\'cf\'e5 \'d4\'cf\'e5 \'c8\'e5 \'da\'e4\'e6\'c7\'e4 \'cc\'e6\'c7\'c8 \'d4\'e3\'c7\'d1\'e5 \'c8\'e5 \'c7\'d4\'ca\'d1\'c7\'98 \'90\'d0\'c7\'d4\'ca\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8984?</i>\\n\\n\lang1065\f1\rtlch\'e1\u1740?\'d3\'ca \'e3\'ce\'c7\'d8\'c8\u1740?\'e4|\'ce\'d5\'e6\'d5\u1740?|\'90\'d1\'e6\'e5|\'d3\'e6\'81\'d1\'90\'d1\'e6\'e5|\'81\'c7\'d3\'ce \'e5\'c7\u1740? \'ce\'e6\'cf\'98\'c7\'d1|\'e1\u1740?\'e4\'98|\'e3\'cf\u1740?\'d1\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cf\'d1\u1740?\'c7\'dd\'ca \'e1\u1740?\'d3\'ca\u1740? \'c7\'d2 \'e3\'e6\'d1\'cf \'ce\'e6\'c7\'d3\'ca\'e5 \'d4\'cf\'e5 \'cf\'d1 \'de\'c7\'e1\'c8 \'81\'d1\'e6\'e4\'cf\'e5 \'e3\'ca\'e4\u1740? \u1740?\'c7 \'81\u1740?\'c7\'e3\lang1033\f0\ltrch  \u-10179?\u-9020?</i>\\n\\n\lang1065\f1\rtlch\'e3\'d3\'cf\'e6\'cf\u1740?\'ca \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'e3\'d3\'cf\'e6\'cf\'9d\'98\'d1\'cf\'e4(\'c8\'e1\'c7\'98) \'98\'c7\'d1\'c8\'d1 \'c8\'c7 \'d4\'e4\'c7\'d3\'e5 \'cf\'c7\'cf\'e5 \'d4\'cf\'e5 \'c7\'d2 \'90\'dd\'ca \'e6 \'90\'e6\u1740? \'ce\'d5\'e6\'d5\u1740?\lang1033\f0\ltrch  \u-10179?\u-8533?</i>\\n\\n\lang1065\f1\rtlch\'d1\'dd\'da \'e3\'d3\'cf\'e6\'cf\u1740?\'ca \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'d1\'dd\'da \'e3\'d3\'cf\'e6\'cf\u1740?\'ca \'98\'c7\'d1\'c8\'d1 \'c8\'c7 \'d4\'e4\'c7\'d3\'e5 \'cf\'c7\'cf\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-9054?</i>\\n\\n\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca \'e3\'d4\'c7\'e5\'cf\'e5 \'d1\'e6\'d4\'e4|\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch  \u-10179?\u-9151?\\n<i>\lang1065\f1\rtlch\'ca\'db\u1740?\u1740?\'d1 \'e6\'d6\'da\u1740?\'ca \'e3\'d4\'c7\'e5\'cf\'e5 \'81\u1740?\'c7\'e3\'9d\'e5\'c7 \'ca\'e6\'d3\'d8 \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1 (\'dd\'da\'c7\'e1 \'e6 \'db\u1740?\'d1\'9d\'dd\'da\'c7\'e1\'9d\'98\'d1\'cf\'e4 \'ca\u1740?\'98 \'cf\'e6\'e3\lang1033\f0\ltrch )</i>\\n\\n\lang1065\f1\rtlch\'c7\'e3\'c7\'d1\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cf\'d1\u1740?\'c7\'dd\'ca \'c2\'e3\'c7\'d1 \'e6 \'e6\'d6\'da\u1740?\'ca \'ca\'c8\'e1\u1740?\'db \'90\'d1\lang1033\f0\ltrch  \u-10179?\u-9014?</i>\\n\\n\lang1065\f1\rtlch\'e6\'d6\'da\u1740?\'ca\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cf\'d1\u1740?\'c7\'dd\'ca \'e6\'d6\'da\u1740?\'ca \'c7\'cc\'d1\'c7\u1740?\u1740? \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1\lang1033\f0\ltrch\u9881?\u-497?</i>\\n\\n\lang1065\f1\rtlch\'ca\'c7\'d2\'e5 \'d3\'c7\'d2\u1740?\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'c7\'d2\'e5\'9d\'d3\'c7\'d2\u1740? \'c2\'e3\'c7\'d1 \'ca\'c8\'e1\u1740?\'db\'9d\'90\'d1\lang1033\f0\ltrch\u-10179?\u-8576?</i>\\n<code>\u-10180?\u-8317?\lang1065\f1\rtlch\'e3\'e6\'d1\'cf \'c7\'d3\'ca\'dd\'c7\'cf\'e5 \'cd\'cf\'c7\'98\'cb\'d1 \u1740?\'98 \'c8\'c7\'d1 \'cf\'d1 \'d1\'e6\'d2\lang1033\f0\ltrch\u-10180?\u-8317?</code>\\n\\n\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'c8\'e5 \'e5\'e3\'e5|\'ce\'d5\'e6\'d5\u1740?|\'90\'d1\'e6\'e5|\'d3\'e6\'81\'d1\'90\'d1\'e6\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'81\u1740?\'c7\'e3 \'cc\'e6\'c7\'c8 \'cf\'c7\'cf\'e5 \'d4\'cf\'e5 \'c8\'e5 \'e3\'e6\'d1\'cf \'ce\'e6\'c7\'d3\'ca\'e5 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8983?</i>\\n<code>(\u-10179?\u-8700?\lang1065\f1\rtlch\'ca\'e6\'d5\u1740?\'e5 \'e3\'c7 \'da\'cf\'e3 \'c7\'d3\'ca\'dd\'c7\'cf\'e5 \'c7\'d2 \'e5\'e3\'e5 \'e6 \'ce\'d5\'e6\'d5\u1740?\lang1033\f0\ltrch\u-10179?\u-8700?)</code>\\n\\n\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'c8\'e5 \'d3\'e6\'81\'d1\'90\'d1\'e6\'e5 \'e3\'ca\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'d1\'d3\'c7\'e1 \'e3\'ca\'e4 \'cf\'c7\'cf\'e5 \'d4\'cf\'e5 \'c8\'e5 \'e5\'e3\'e5 \'d3\'e6\'81\'d1\'90\'d1\'e6\'e5 \'e5\'c7\lang1033\f0\ltrch  \u9993?\u-497?</i>\\n<code>(\u-10179?\u-8676?\lang1065\f1\rtlch\'ca\'e6\'d5\u1740?\'e5 \'e3\'c7 \'c7\'d3\'ca\'dd\'c7\'cf\'e5 \'e6 \'c7\'cf\'db\'c7\'e3 \'cf\'d3\'ca\'e6\'d1\'c7\'ca \'c8\'90\'e6 \'e6 \'c7\'d1\'d3\'c7\'e1 \'c8\'e5 \'d3\'e6\'81\'d1\'90\'d1\'e6\'e5\lang1033\f0\ltrch\u-10179?\u-8676?)</code>\\n\\n\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'cc\'e6\'c7\'c8 "\'e3\'ca\'e4" \'cc\'e6\'c7\'c8\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'e4\'d9\u1740?\'e3 \'cc\'e6\'c7\'c8\u1740? \'c8\'e5 \'da\'e4\'e6\'c7\'e4 \'81\'c7\'d3\'ce \'ce\'e6\'cf\'98\'c7\'d1 \'c8\'e5 \'81\u1740?\'c7\'e3 \'e6\'c7\'d1\'cf \'d4\'cf\'e5 \'e3\'d8\'c7\'c8\'de \'c8\'c7 \'e3\'ca\'e4 \'c8\'c7\'d4\'cf\lang1033\f0\ltrch  \u-10179?\u-8995?</i>\\n\\n\lang1065\f1\rtlch\'cd\'d0\'dd \'cc\'e6\'c7\'c8 \'e3\'ca\'e4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cd\'d0\'dd \'cc\'e6\'c7\'c8 \'e3\'d1\'c8\'e6\'d8 \'c8\'e5 \'e3\'ca\'e4\lang1033\f0\ltrch  \u10006?\u-497?</i>\\n\\n\lang1065\f1\rtlch\'81\'c7\'d3\'ce\'90\'e6\u1740? \'ce\'e6\'cf\'98\'c7\'d1 \'d1\'e6\'d4\'e4|\'ce\'c7\'e3\'e6\'d4\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'ca\'db\u1740?\u1740?\'d1 \'e6\'d6\'da\u1740?\'ca \'81\'c7\'d3\'ce\'90\'e6\u1740?\u1740? \'ce\'e6\'cf\'98\'c7\'d1 \'ca\'c8\'e1\u1740?\'db \'90\'d1 \'c8\'e5 \'e3\'ca\'e4 \'e5\'c7\u1740? \'ca\'e4\'d9\u1740?\'e3 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8977?</i>\\n\\n\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'c8\'e5 \'e5\'e3\'e5 \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'98\'c7\'c8\'d1 \'c8\'c7 \'d4\'e4\'c7\'d3\'e5 \'e6\'c7\'d1\'cf \'d4\'cf\'e5 \'c8\'e5 \'e5\'e3\'e5 \'90\'d1\'e6\'e5 \'e6 \'d3\'e6\'81\'d1\'90\'d1\'e6\'e5 \'e5\'c7\lang1033\f0\ltrch  \u10133?\u10133?</i>\\n\\n\lang1065\f1\rtlch\'ca\'d1\'98 \'98\'d1\'cf\'e4 \'d4\'e4\'c7\'d3\'e5\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'da\'e3\'e1\u1740?\'c7\'ca \'ca\'d1\'98 \'98\'d1\'cf\'e4 \'c8\'c7 \'c7\'d3\'ca\'dd\'c7\'cf\'e5 \'c7\'d2 \'d4\'e4\'c7\'d3\'e5 \'90\'d1\'e6\'e5\lang1033\f0\ltrch  \u-10180?\u-8253?</i>\\n\\n\lang1065\f1\rtlch\'d1\'c7\'e5\'e4\'e3\'c7\lang1033\f0\ltrch\\n<i>\lang1065\f1\rtlch\'cf\'d1\u1740?\'c7\'dd\'ca \'e5\'e3\u1740?\'e4 \'81\u1740?\'c7\'e3\lang1033\f0\ltrch  \u-10180?\u-8808?</i>\\n\lang1065\f2\u12336?\u12336?\u12336?\f1\rtlch\'c7\f2\ltrch\u12336?\u12336?\u12336?\\n\f1\rtlch\'e5\'e3\'90\'c7\'e3 \'d3\'c7\'d2\u1740? \'c8\'c7 \'ca\'c8\'8d\u1740?\lang1033\f0\ltrch\\n<code>\lang1065\f1\rtlch\'e5\'e3\'90\'c7\'e3 \'d3\'c7\'d2\u1740? \'c7\'d8\'e1\'c7\'da\'c7\'ca \'ca\'c8\'e1\u1740?\'db \'90\'d1 \'c8\'c7 \'c7\'d8\'e1\'c7\'da\'c7\'ca \'ca\'c8\'8d\u1740? \'c7\'d2 \'de\'c8\'e1 \'e4\'d5\'c8 \'d4\'cf\'e5\lang1033\f0\ltrch  \u-10179?\u-8957? (\lang1065\f1\rtlch\'cc\'e5\'ca \'c7\u1740?\'e4 \'c7\'e3\'d1 \'cd\'ca\'e3\'c7 \'c8\'e5 \'e6\u1740?\'cf\u1740?\'e6 \'c2\'e3\'e6\'d2\'d4\u1740? \'98\'c7\'e4\'c7\'e1 \'e3\'d1\'c7\'cc\'da\'e5 \'98\'e4\u1740?\'cf\lang1033\f0\ltrch )</code>\\n\lang1065\f2\u12336?\u12336?\u12336?\f1\rtlch\'c7\f2\ltrch\u12336?\u12336?\u12336?\\n\f1\rtlch\'d3\'c7\'d2\'e4\'cf\'e5\lang1033\f0\ltrch  : @mansour_zv \\n\lang1065\f1\rtlch\'98\'c7\'e4\'c7\'e1\lang1033\f0\ltrch  : @tabchi59\\n<i>\lang1065\f1\rtlch\'c2\'cf\'d1\'d3 \'d3\'e6\'d1\'d3 \'ca\'c8\'e1\u1740?\'db \'90\'d1 (\'98\'c7\'e3\'e1\'c7 \'dd\'c7\'d1\'d3\u1740?\lang1033\f0\ltrch ) :</i>\\nhttps://github.com/ramtintz/tabchi/\\n<code>\lang1065\f1\rtlch\'c2\'ce\'d1\u1740?\'e4 \'c7\'ce\'c8\'c7\'d1 \'e6 \'d1\'e6\u1740?\'cf\'c7\'cf \'e5\'c7\u1740? \'ca\'c8\'e1\u1740?\'db \'90\'d1 \'d1\'c7 \'cf\'d1 \'98\'c7\'e4\'c7\'e1 \'e3\'c7 \'81\u1740?\'90\u1740?\'d1\u1740? \'98\'e4\u1740?\'cf\lang1033\f0\ltrch .</code>'\par
+\tab\tab\tab\tab\tab return send(msg.chat_id_,msg.id_, txt)\par
+\tab\tab\tab\tab elseif tostring(msg.chat_id_):match("^-") then\par
+\tab\tab\tab\tab\tab if text:match("^(\lang1065\f1\rtlch\'ca\'d1\'98 \'98\'d1\'cf\'e4\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab\tab rem(msg.chat_id_)\par
+\tab\tab\tab\tab\tab\tab return tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab\tab ID = "ChangeChatMemberStatus",\par
+\tab\tab\tab\tab\tab\tab\tab chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab\tab\tab\tab user_id_ = bot_id,\par
+\tab\tab\tab\tab\tab\tab\tab status_ = \{ID = "ChatMemberStatusLeft"\},\par
+\tab\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab\tab elseif text:match("^(\lang1065\f1\rtlch\'c7\'dd\'d2\'e6\'cf\'e4 \'e5\'e3\'e5 \'e3\'ce\'c7\'d8\'c8\u1740?\'e4\lang1033\f0\ltrch )$") then\par
+\tab\tab\tab\tab\tab\tab tdcli_function(\{\par
+\tab\tab\tab\tab\tab\tab\tab ID = "SearchContacts",\par
+\tab\tab\tab\tab\tab\tab\tab query_ = nil,\par
+\tab\tab\tab\tab\tab\tab\tab limit_ = 999999999\par
+\tab\tab\tab\tab\tab\tab\},function(i, naji)\par
+\tab\tab\tab\tab\tab\tab\tab local users, count = redis:smembers("botBOT-IDusers"), naji.total_count_\par
+\tab\tab\tab\tab\tab\tab\tab for n=0, tonumber(count) - 1 do\par
+\tab\tab\tab\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab ID = "AddChatMember",\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab chat_id_ = i.chat_id,\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab user_id_ = naji.users_[n].id_,\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab forward_limit_ = 50\par
+\tab\tab\tab\tab\tab\tab\tab\tab\},  dl_cb, nil)\par
+\tab\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab\tab for n=1, #users do\par
+\tab\tab\tab\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab ID = "AddChatMember",\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab chat_id_ = i.chat_id,\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab user_id_ = users[n],\par
+\tab\tab\tab\tab\tab\tab\tab\tab\tab forward_limit_ = 50\par
+\tab\tab\tab\tab\tab\tab\tab\tab\},  dl_cb, nil)\par
+\tab\tab\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab\tab\tab end, \{chat_id=msg.chat_id_\})\par
+\tab\tab\tab\tab\tab\tab return send(msg.chat_id_, msg.id_, "<i>\lang1065\f1\rtlch\'cf\'d1 \'cd\'c7\'e1 \'c7\'dd\'d2\'e6\'cf\'e4 \'e3\'ce\'c7\'d8\'c8\u1740?\'e4 \'c8\'e5 \'90\'d1\'e6\'e5\lang1033\f0\ltrch  ...</i>")\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab end\par
+\tab\tab\tab end\par
+\tab\tab\tab if redis:sismember("botBOT-IDanswerslist", text) then\par
+\tab\tab\tab\tab if redis:get("botBOT-IDautoanswer") then\par
+\tab\tab\tab\tab\tab if msg.sender_user_id_ ~= bot_id then\par
+\tab\tab\tab\tab\tab\tab local answer = redis:hget("botBOT-IDanswers", text)\par
+\tab\tab\tab\tab\tab\tab send(msg.chat_id_, 0, answer)\par
+\tab\tab\tab\tab\tab end\par
+\tab\tab\tab\tab end\par
+\tab\tab\tab end\par
+\tab\tab elseif msg.content_.ID == "MessageContact" then\par
+\tab\tab\tab local id = msg.content_.contact_.user_id_\par
+\tab\tab\tab if not redis:sismember("botBOT-IDaddedcontacts",id) then\par
+\tab\tab\tab\tab redis:sadd("botBOT-IDaddedcontacts",id)\par
+\tab\tab\tab\tab local first = msg.content_.contact_.first_name_ or "-"\par
+\tab\tab\tab\tab local last = msg.content_.contact_.last_name_ or "-"\par
+\tab\tab\tab\tab local phone = msg.content_.contact_.phone_number_\par
+\tab\tab\tab\tab local id = msg.content_.contact_.user_id_\par
+\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab ID = "ImportContacts",\par
+\tab\tab\tab\tab\tab contacts_ = \{[0] = \{\par
+\tab\tab\tab\tab\tab\tab\tab phone_number_ = tostring(phone),\par
+\tab\tab\tab\tab\tab\tab\tab first_name_ = tostring(first),\par
+\tab\tab\tab\tab\tab\tab\tab last_name_ = tostring(last),\par
+\tab\tab\tab\tab\tab\tab\tab user_id_ = id\par
+\tab\tab\tab\tab\tab\tab\},\par
+\tab\tab\tab\tab\tab\},\par
+\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab if redis:get("botBOT-IDaddcontact") and msg.sender_user_id_ ~= bot_id then\par
+\tab\tab\tab\tab\tab local fname = redis:get("botBOT-IDfname")\par
+\tab\tab\tab\tab\tab local lnasme = redis:get("botBOT-IDlname") or ""\par
+\tab\tab\tab\tab\tab local num = redis:get("botBOT-IDnum")\par
+\tab\tab\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab\tab\tab ID = "SendMessage",\par
+\tab\tab\tab\tab\tab\tab chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab\tab\tab reply_to_message_id_ = msg.id_,\par
+\tab\tab\tab\tab\tab\tab disable_notification_ = 1,\par
+\tab\tab\tab\tab\tab\tab from_background_ = 1,\par
+\tab\tab\tab\tab\tab\tab reply_markup_ = nil,\par
+\tab\tab\tab\tab\tab\tab input_message_content_ = \{\par
+\tab\tab\tab\tab\tab\tab\tab ID = "InputMessageContact",\par
+\tab\tab\tab\tab\tab\tab\tab contact_ = \{\par
+\tab\tab\tab\tab\tab\tab\tab\tab ID = "Contact",\par
+\tab\tab\tab\tab\tab\tab\tab\tab phone_number_ = num,\par
+\tab\tab\tab\tab\tab\tab\tab\tab first_name_ = fname,\par
+\tab\tab\tab\tab\tab\tab\tab\tab last_name_ = lname,\par
+\tab\tab\tab\tab\tab\tab\tab\tab user_id_ = bot_id\par
+\tab\tab\tab\tab\tab\tab\tab\},\par
+\tab\tab\tab\tab\tab\tab\},\par
+\tab\tab\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab\tab\tab end\par
+\tab\tab\tab end\par
+\tab\tab\tab if redis:get("botBOT-IDaddmsg") then\par
+\tab\tab\tab\tab local answer = redis:get("botBOT-IDaddmsgtext") or "\lang1065\f1\rtlch\'c7\'cf\'cf\u1740? \'90\'e1\'e3 \'ce\'d5\'e6\'d5\u1740? \'81\u1740?\'c7\'e3 \'c8\'cf\'e5\lang1033\f0\ltrch "\par
+\tab\tab\tab\tab send(msg.chat_id_, msg.id_, answer)\par
+\tab\tab\tab end\par
+\tab\tab elseif msg.content_.ID == "MessageChatDeleteMember" and msg.content_.id_ == bot_id then\par
+\tab\tab\tab return rem(msg.chat_id_)\par
+\tab\tab elseif msg.content_.ID == "MessageChatJoinByLink" and msg.sender_user_id_ == bot_id then\par
+\tab\tab\tab return add(msg.chat_id_)\par
+\tab\tab elseif msg.content_.ID == "MessageChatAddMembers" then\par
+\tab\tab\tab for i = 0, #msg.content_.members_ do\par
+\tab\tab\tab\tab if msg.content_.members_[i].id_ == bot_id then\par
+\tab\tab\tab\tab\tab add(msg.chat_id_)\par
+\tab\tab\tab\tab end\par
+\tab\tab\tab end\par
+\tab\tab elseif msg.content_.caption_ then\par
+\tab\tab\tab return find_link(msg.content_.caption_)\par
+\tab\tab end\par
+\tab\tab if redis:get("botBOT-IDmarkread") then\par
+\tab\tab\tab tdcli_function (\{\par
+\tab\tab\tab\tab ID = "ViewMessages",\par
+\tab\tab\tab\tab chat_id_ = msg.chat_id_,\par
+\tab\tab\tab\tab message_ids_ = \{[0] = msg.id_\} \par
+\tab\tab\tab\}, dl_cb, nil)\par
+\tab\tab end\par
+\tab elseif data.ID == "UpdateOption" and data.name_ == "my_id" then\par
+\tab\tab tdcli_function (\{\par
+\tab\tab\tab ID = "GetChats",\par
+\tab\tab\tab offset_order_ = 9223372036854775807,\par
+\tab\tab\tab offset_chat_id_ = 0,\par
+\tab\tab\tab limit_ = 20\par
+\tab\tab\}, dl_cb, nil)\par
+\tab end\par
+end\par
+}
+ 
